@@ -14,14 +14,12 @@ object Route1 {
   import akka.http.scaladsl.server.Directives._
   val route =
     path("get") {
-      concat(
-        get {
-          import spray.json.DefaultJsonProtocol._
-          implicit val itemFormat: RootJsonFormat[Item] = jsonFormat2(Item.apply)
-          import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport.sprayJsonMarshaller
-          complete(getItems)
-        }
-      )
+      concat(get {
+        import spray.json.DefaultJsonProtocol._
+        implicit val itemFormat: RootJsonFormat[Item] = jsonFormat2(Item.apply)
+        import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport.sprayJsonMarshaller
+        complete(getItems)
+      })
     } ~
       path("get-stream") {
         get {
@@ -30,12 +28,10 @@ object Route1 {
             HttpEntity(
               ContentTypes.`text/plain(UTF-8)`,
               // transform each number to a chunk of bytes
-              ids.map(n => ByteString(s"$n\n"))
-            )
-          )
+              ids.map(n => ByteString(s"$n\n"))))
         }
       } ~
-      path("post"){
+      path("post") {
         post {
           import spray.json.DefaultJsonProtocol._
           implicit val itemFormat: RootJsonFormat[Item] = jsonFormat2(Item.apply)
